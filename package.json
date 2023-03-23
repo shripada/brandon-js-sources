@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "nodemon-index": "nodemon ./index.js"
+    "nodemon-index": "nodemon ./index.js",
+    "run-prime-tests": "nodemon ./prime.test.js"
   },
   "author": "Shripada",
   "license": "ISC",
