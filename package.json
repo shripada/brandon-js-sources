@@ -4,13 +4,14 @@
   "description": "This is the javascript playground where we will write some interesting JS code",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "nodemon-index": "nodemon ./index.js",
     "run-prime-tests": "nodemon ./prime.test.js"
   },
   "author": "Shripada",
   "license": "ISC",
   "devDependencies": {
+    "jest": "^29.5.0",
     "nodemon": "^2.0.20"
   },
   "dependencies": {

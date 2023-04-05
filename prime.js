@@ -69,7 +69,7 @@ function isPrime(number) {
       return true;
     }
  
-    for(let i = 2; i <= number/2; i++){
+    for(let i = 2, ; i <= Math.sqrt(numberValue); i++){
        if(numberValue % i === 0) { // reminder is 0 means, i is a factor of number. So number is not a prime
          isNumberPrime = false; 
          break;
