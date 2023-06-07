@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
+    "test-fs": "jest fs-promise.test.js",
     "nodemon-index": "nodemon ./index.js",
     "run-prime-tests": "nodemon ./prime.test.js"
   },

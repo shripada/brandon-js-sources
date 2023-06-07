@@ -1,4 +1,9 @@
 const fs = require('fs');
+const {
+  getStatPromise,
+  getReadFilePromise,
+  getReadFolderPromise,
+} = require('./fs-promise');
 
 const path = process.argv.slice(2)[0];
 console.log(process.argv);
@@ -40,5 +45,26 @@ function processPath(path) {
   });
 }
 
-processPath(path);
+// Implementation of processPath using promisified fs APIs
+
+function processPathAsync(path) {
+  // check if path is a file
+  getStatPromise(path)
+    .then((stat) => {
+      if (stat.isFile()) {
+        getReadFilePromise(path).then(({ data }) =>
+          console.log(`Contents of file ${path}\n`, data)
+        );
+      } else {
+        getReadFolderPromise(path).then(({ files }) =>
+          console.log(`Files within directory ${path}: \n`, files)
+        );
+      }
+    })
+    .catch((err) => {
+      console.log('Error recieved', err);
+    });
+}
+
+processPathAsync(path);
 console.log('I will be called first always');
