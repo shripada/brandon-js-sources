@@ -1,5 +1,6 @@
 var prompt = require('prompt-sync')();
 const assert = require('assert');
+const exp = require('constants');
 /*
   Prime number is a number that is divisible by itself and the number 1. It can not be divided without leaving a reminder by any other numbers
 */

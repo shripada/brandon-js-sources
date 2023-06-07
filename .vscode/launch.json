@@ -7,6 +7,14 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "Debug functions",
+      "skipFiles": ["<node_internals>/**"],
+      "program": "${workspaceFolder}/functions.js",
+      "runtimeExecutable": "/Users/shripada/.nvm/versions/node/v18.8.0/bin/node"
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "name": "Debug prime module",
       "skipFiles": ["<node_internals>/**"],
       "program": "${workspaceFolder}/prime.asserts.js"
@@ -22,6 +30,15 @@
       ],
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug fs",
+      "skipFiles": ["<node_internals>/**"],
+      "program": "${workspaceFolder}/fs.js",
+      "args": ["."],
+      "runtimeExecutable": "/Users/shripada/.nvm/versions/node/v18.8.0/bin/node"
     }
   ]
 }
