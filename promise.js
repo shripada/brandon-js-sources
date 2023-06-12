@@ -84,3 +84,75 @@ checkMail()
   .finally(() => {
     console.log('Experiment completed');
   });
+
+const promise1 = Promise.resolve(100);
+
+const delay = (timeout) =>
+  new Promise((resolve, reject) => setTimeout(resolve, timeout));
+
+const promise2 = delay(2000).then(() => {
+  throw 2000;
+});
+const promise3 = delay(3000).then(() => 3000);
+
+// Print to consolve when all of the above resolve
+// promise1.then((value1) =>
+//   promise2.then((value2) =>
+//     promise3.then((value3) => {
+//       console.log(
+//         'All 3 promises should be resolved if we reach here!',
+//         value1,
+//         value2,
+//         value3
+//       );
+//     })
+//   )
+// );
+
+//This will help us to perform something that depends on success of many promises
+// For example, a screen's sections having their own APIs to fill their contents.
+// Here to conclude that the entire page has loaded, requires us to wait for all promises
+// to succeed. Promise.all will take an array of promises and will return a single promise.
+// this single promise can be used to get the values of all promises as an array.
+// If any of the promises fail, then this promise will reject with that error.
+const unifiedPromise = Promise.all([promise1, promise2, promise3]);
+unifiedPromise
+  .then((values) => {
+    console.log(values);
+  })
+  .catch((errors) => console.log(errors));
+
+// Promise.any on the other hand will return a single promise from an array of promises.
+// If any of the promise succeeds first, its value will be the resolved value of this promise.
+// if all fail, then only this resultant promise fails.
+
+const promise4 = delay(1000).then(() => {
+  throw 1000;
+});
+const promise5 = delay(2000).then(() => {
+  throw 2000;
+});
+const promise6 = delay(3000).then(() => {
+  throw 3000;
+});
+
+// Try to see if atleast one promise succeeds, if all fail, then return a rejected promise with all errors
+// const resultPromise = promise4
+//   .then((promise4Value) => promise4Value)
+//   .catch((error1) => {
+//     return promise5
+//       .then((promise5Val) => promise5Val)
+//       .catch((error2) => {
+//         return promise6
+//           .then((promise6Val) => promise6Val)
+//           .catch((error3) => Promise.reject([error1, error2, error3]));
+//       });
+//   });
+
+// Thanks to Promise.any, we dont need to do the above circus!
+Promise.any([promise4, promise5, promise6])
+  .then((resolveVal) => console.log('resolved:', resolveVal))
+  .catch((errors) => console.log(errors));
+
+// If you have a scenario, where you want to consume the fastest promise among a list of promises that settles first
+// (with success or error, in that case, we can use Promise.race
