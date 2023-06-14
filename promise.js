@@ -74,16 +74,16 @@ function checkMail() {
   });
 }
 
-checkMail()
-  .then((mail) => {
-    console.log(mail);
-  })
-  .catch((err) => {
-    console.error(err);
-  })
-  .finally(() => {
-    console.log('Experiment completed');
-  });
+// checkMail()
+//   .then((mail) => {
+//     console.log(mail);
+//   })
+//   .catch((err) => {
+//     console.error(err);
+//   })
+//   .finally(() => {
+//     console.log('Experiment completed');
+//   });
 
 const promise1 = Promise.resolve(100);
 
@@ -156,3 +156,62 @@ Promise.any([promise4, promise5, promise6])
 
 // If you have a scenario, where you want to consume the fastest promise among a list of promises that settles first
 // (with success or error, in that case, we can use Promise.race
+
+/*
+connecting to a central database with a user id.
+user id must be verified before we can try connecting - we need to do a lookup into a local user database
+if the user is found in user data base, we should get a connect id from another db, called connection db
+if we get the connection id, then we can connect to the central db and return a db object
+*/
+
+function lookupInLocalDb(userId) {
+  const userHandle = 1;
+  return delay(1000).then(() => {
+    if (userId === 100) {
+      throw new Error('The user id is blocked!!');
+    }
+    return userHandle;
+  });
+}
+
+function getConnectionId(userHandle) {
+  const connectionId = 2;
+  return delay(1000).then(() => connectionId);
+}
+
+function getCentralDbHandle(connectionId) {
+  if (connectionId !== 2) {
+    throw new Error('Invalid  connection id');
+  }
+  const dbHandle = 3;
+  return delay(1000).then(() => dbHandle);
+}
+
+async function getConnectionToCentralDB(userId) {
+  // return lookupInLocalDb(userId)
+  //   .then((userHandle) => {
+  //     return getConnectionId(userHandle).then((connectionId) => {
+  //       return getCentralDbHandle(connectionId);
+  //     });
+  //   })
+  //   .catch(() => {
+  //     /*handle any error*/
+  //   });
+  try {
+    const userHandle = await lookupInLocalDb(userId);
+    const connectionId = await getConnectionId(userHandle);
+    return getCentralDbHandle(connectionId);
+  } catch (error) {
+    console.log('Found an error: ', error.message);
+  }
+  // In an async function (marked with a keyword async), the returned value (other than a promise) will be wrapped in a resolved promise.
+}
+
+async function doDbConnection() {
+  const dbHandle = await getConnectionToCentralDB(100);
+  console.log(dbHandle);
+}
+
+doDbConnection();
+
+// In ES8 (2017), async and await
