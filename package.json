@@ -6,6 +6,7 @@
   "scripts": {
     "test": "jest",
     "test-fs": "jest fs-promise.test.js",
+    "test-await": "jest async-await.test.js",
     "nodemon-index": "nodemon ./index.js",
     "run-prime-tests": "nodemon ./prime.test.js"
   },
