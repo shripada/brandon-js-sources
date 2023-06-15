@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Type Ahead 👀</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="https://fav.farm/🔥" />
+  </head>
+  <body>
+    <form class="search-form">
+      <input type="text" class="search" placeholder="City or State" />
+      <ul class="suggestions">
+        <li>Filter for a city</li>
+        <li>or a state</li>
+      </ul>
+    </form>
+    <script>
+      const cityList = document.querySelector('.suggestions');
+      function updateUIWithCities(cities) {
+        // For each city we need to get the name of the city followed by the population
+        //cityList.innerHTML = '<li> Hi there </li>';
+        const listItemsHTML = cities
+          .map(
+            (city) =>
+              `<li data-index=${city.rank - 1}><span data-index=${
+                city.rank - 1
+              } class="name">${city.city}</span>  <span data-index=${
+                city.rank - 1
+              } class="population">${new Intl.NumberFormat('en-IN').format(
+                city.population
+              )}</span></li>`
+          )
+          .join('');
+        cityList.innerHTML = listItemsHTML;
+      }
+
+      // Fetches the city data, converts it into a json object and returns a promise.
+      // HTTP GET request, POST, PATCH, PUT
+      function fetchCities() {
+        const endpoint =
+          'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+        const promise = fetch(endpoint);
+        console.log(promise);
+
+        return promise.then((data) => data.json()).then((json) => json);
+      }
+      const cities = [];
+      fetchCities().then((citiesIn) => {
+        cities.push(...citiesIn);
+        updateUIWithCities(cities);
+      });
+
+      function onSearchInput(event) {
+        // filter the city list such that we have matches in city name, or the state of the city
+        const searchTerm = event.target.value;
+        const regEx = new RegExp(searchTerm, 'gi'); ///`${searchTerm}`/gi;
+        const filteredCities = cities.filter(
+          (place) => place.city.match(regEx) || place.state.match(regEx)
+        );
+
+        updateUIWithCities(filteredCities);
+      }
+
+      // get a reference to the input search field.
+      const searchField = document.querySelector('.search');
+      searchField.addEventListener('keyup', onSearchInput);
+
+      function onListTapped(event) {
+        console.log(event.target);
+        console.log(event.target.dataset.index);
+        console.log(cities[event.target.dataset.index]);
+        const previouslySelected = document.querySelector('li.selected');
+        previouslySelected?.classList.remove('selected');
+        const currentListItem = document.querySelector(
+          `li[data-index="${event.target.dataset.index}"]`
+        );
+        currentListItem.classList.add('selected');
+      }
+
+      cityList.addEventListener('click', onListTapped);
+    </script>
+  </body>
+</html>

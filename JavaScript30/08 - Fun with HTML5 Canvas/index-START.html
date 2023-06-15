@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>HTML5 Canvas</title>
+    <link rel="icon" href="https://fav.farm/🔥" />
+  </head>
+  <body>
+    <canvas id="draw" width="800" height="800"></canvas>
+    <script>
+      const canvas = document.querySelector('#draw');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      // We are going to draw in 2D world
+      const context = canvas.getContext('2d');
+
+      // Context is like a set of settings that will be used for drawing.
+      context.strokeStyle = '#BADA55';
+      context.lineWidth = 4;
+
+      // context.moveTo(0, 0);
+      // const midX = window.innerWidth / 2;
+      // const midY = window.innerHeight / 2;
+
+      // context.lineTo(midX, midY);
+      // context.stroke();
+
+      // context.moveTo(midX, midY);
+      // context.lineTo(window.innerWidth, 0);
+      // context.stroke();
+      let stokeStartX = 0;
+      let strokeStartY = 0;
+      let canDraw = true;
+      canvas.addEventListener('mousedown', (e) => {
+        console.log('mousedown', e);
+        [strokeStartX, strokeStartY] = [e.offsetX, e.offsetY];
+        canDraw = true;
+      });
+
+      canvas.addEventListener('mousemove', (e) => {
+        if (!canDraw) {
+          return;
+        }
+        console.log('mousemove', e);
+        const [toX, toY] = [e.offsetX, e.offsetY];
+
+        context.moveTo(strokeStartX, strokeStartY);
+        context.lineTo(toX, toY);
+        context.stroke();
+
+        strokeStartX = toX;
+        strokeStartY = toY;
+      });
+
+      canvas.addEventListener('mouseup', (e) => {
+        canDraw = false;
+      });
+    </script>
+
+    <style>
+      html,
+      body {
+        margin: 0;
+      }
+    </style>
+  </body>
+</html>

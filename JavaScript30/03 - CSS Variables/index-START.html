@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Scoped CSS Variables and JS</title>
+    <link rel="icon" href="https://fav.farm/🔥" />
+  </head>
+  <body>
+    <h2>Update CSS Variables with <span class="hl">JS</span></h2>
+
+    <div class="controls">
+      <label for="spacing">Spacing:</label>
+      <input
+        id="spacing"
+        type="range"
+        name="spacing"
+        min="10"
+        max="200"
+        value="10"
+        data-sizing="px"
+      />
+
+      <label for="blur">Blur:</label>
+      <input
+        id="blur"
+        type="range"
+        name="blur"
+        min="0"
+        max="25"
+        value="10"
+        data-sizing="px"
+      />
+
+      <label for="base">Base Color</label>
+      <input id="base" type="color" name="base" value="#ffc600" />
+    </div>
+
+    <img src="./image.jpg" />
+
+    <style>
+      /*
+      misc styles, nothing to do with CSS variables
+    */
+
+      html {
+        --image-padding: 40px;
+        --base-color: #ffcc00;
+        --blur-radius: 0px;
+      }
+
+      body {
+        text-align: center;
+        background: #193549;
+        color: white;
+        font-family: 'helvetica neue', sans-serif;
+        font-weight: 100;
+        font-size: 50px;
+      }
+
+      .controls {
+        margin-bottom: 50px;
+      }
+
+      input {
+        width: 100px;
+      }
+
+      img {
+        padding: var(--image-padding);
+        background-color: var(--base-color);
+        filter: blur(var(--blur-radius));
+      }
+
+      .hl {
+        color: var(--base-color);
+      }
+    </style>
+
+    <script>
+      // reference to space range control
+      const spaceControl = document.getElementById('spacing');
+      console.assert(spaceControl !== undefined && spaceControl !== null);
+      // reference to the image element
+      const image = document.querySelector('img');
+      console.assert(image !== undefined && image !== null);
+
+      // reference to the blur range
+      const blurControl = document.getElementById('blur');
+      console.assert(blurControl !== undefined && blurControl !== null);
+
+      // reference to the color picker
+      const colorPicker = document.getElementById('base');
+      console.assert(colorPicker !== null);
+
+      // Sync model with UI. Our model is in our css vars introduced in root element
+
+      function updatePaddingOfImage(paddingValue) {
+        document.documentElement.style.setProperty(
+          `--image-padding`,
+          `${paddingValue}px`
+        );
+      }
+
+      function updateBlurFilterValue(blurValue) {
+        // simply change the value of the variable that is representing blur
+        //  --blur-radius
+        document.documentElement.style.setProperty(
+          `--blur-radius`,
+          `${blurValue}px`
+        );
+      }
+
+      function updateBackgroundColorOfImage(colorCode) {
+        document.documentElement.style.setProperty(
+          `--base-color`,
+          `${colorCode}`
+        );
+      }
+
+      const absPadding = parseInt(
+        getComputedStyle(document.documentElement).getPropertyValue(
+          '--image-padding',
+          10
+        )
+      );
+      spaceControl.value = absPadding;
+
+      const absBlurRadius = parseInt(
+        getComputedStyle(document.documentElement).getPropertyValue(
+          '--blur-radius',
+          10
+        )
+      );
+      blurControl.value = absBlurRadius;
+
+      const absColor = getComputedStyle(
+        document.documentElement
+      ).getPropertyValue('--base-color');
+
+      colorPicker.value = absColor;
+
+      // Event handler for the space range control
+      function onSpaceChange(event) {
+        console.log(event.target.value);
+        updatePaddingOfImage(event.target.value);
+      }
+
+      // Event handler for blur control
+      function onBlurChange(event) {
+        console.log(event.target.value);
+        updateBlurFilterValue(event.target.value);
+      }
+
+      // Event handler for color picker
+      function onColorChange(event) {
+        console.log(event.target.value);
+        updateBackgroundColorOfImage(event.target.value);
+      }
+
+      spaceControl.addEventListener('change', onSpaceChange);
+      spaceControl.addEventListener('input', onSpaceChange);
+
+      blurControl.addEventListener('change', onBlurChange);
+      blurControl.addEventListener('input', onBlurChange);
+
+      colorPicker.addEventListener('change', onColorChange);
+      colorPicker.addEventListener('input', onColorChange);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>JS + CSS Clock</title>
+    <link rel="icon" href="https://fav.farm/🔥" />
+  </head>
+  <body>
+    <div class="clock">
+      <div class="clock-face">
+        <div class="hand hour-hand"></div>
+        <div class="hand min-hand"></div>
+        <div class="hand second-hand"></div>
+      </div>
+    </div>
+
+    <div class="digital-clock">
+      <div>4</div>
+      <div>:</div>
+      <div>35</div>
+      <div>:</div>
+      <div>30</div>
+    </div>
+
+    <style>
+      html {
+        background: #018ded url(https://unsplash.it/1500/1000?image=881&blur=5);
+        background-size: cover;
+        font-family: 'helvetica neue';
+        text-align: center;
+        font-size: 10px;
+      }
+
+      body {
+        margin: 0;
+        font-size: 2rem;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        min-height: 100vh;
+        align-items: center;
+      }
+
+      .clock {
+        width: 30rem;
+        height: 30rem;
+        border: 2px solid white;
+        border-radius: 50%;
+        margin: 50px auto;
+        position: relative;
+        padding: 2rem;
+        box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.1), inset 0 0 0 3px #efefef,
+          inset 0 0 10px black, 0 0 10px rgba(0, 0, 0, 0.2);
+      }
+
+      .clock-face {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transform: translateY(
+          -3px
+        ); /* account for the height of the clock hands */
+      }
+
+      .hand {
+        width: 50%;
+        height: 6px;
+        background: black;
+        position: absolute;
+        top: 50%;
+        transform-origin: 100%;
+        transition: transform 0.05s linear;
+      }
+
+      .second-hand {
+        background-color: red;
+        transform: rotate(90deg);
+      }
+
+      .min-hand {
+        --min-width-factor: 20px;
+        width: calc(50% - var(--min-width-factor));
+        background-color: blue;
+        transform: translateX(var(--min-width-factor)) rotate(60deg);
+      }
+
+      .hour-hand {
+        --hour-width-factor: 70px;
+        width: calc(50% - var(--hour-width-factor));
+        background-color: green;
+        transform: translateX(var(--hour-width-factor)) rotate(120deg);
+      }
+
+      .digital-clock {
+        display: flex;
+      }
+    </style>
+
+    <script>
+      function tick(hours, minutes, seconds) {
+        // Clock has 360deg in it geometrically
+        // 60 seconds to 360 degrees
+        const secondsDegrees = (360 / 60) * seconds + 90;
+        const minDegrees = (360 / 60) * minutes + 90;
+        const hourDegrees = (360 / 12) * (hours + minutes / 60) + 90;
+        const secondsHand = document.querySelector('.hand.second-hand');
+        secondsHand.style.transform = `rotate(${secondsDegrees}deg)`;
+
+        const minHand = document.querySelector('.hand.min-hand');
+        minHand.style.transform = `translateX(var(--min-width-factor)) rotate(${minDegrees}deg)`;
+
+        const hourHand = document.querySelector('.hand.hour-hand');
+        hourHand.style.transform = `translateX(var(--hour-width-factor)) rotate(${hourDegrees}deg)`;
+      }
+
+      function fireTick() {
+        const now = new Date();
+        const seconds = now.getSeconds();
+        const minutes = now.getMinutes();
+        const hours = now.getHours();
+        tick(hours, minutes, seconds);
+      }
+
+      setInterval(fireTick, 1000);
+    </script>
+  </body>
+</html>
