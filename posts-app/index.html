@@ -80,8 +80,10 @@
         try {
           const post = await getPostForId(1);
           showPostInfoSection(post);
+          hidePostLoader();
         } catch (error) {
           console.log(error);
+          hidePostLoader();
         } finally {
           hidePostLoader();
         }

@@ -18,7 +18,7 @@
         messageElement !== null,
         'message element must be present'
       );
-
+      debugger;
       console.log(messageElement);
       console.dir(messageElement); // Very useful to inspect DOM element object's internals.
 
@@ -26,6 +26,7 @@
       console.log(dogs);
       console.dir(dogs);
       function makeGreen() {
+        debugger;
         const p = document.querySelector('p');
         p.style.color = '#BADA55';
         p.style.fontSize = '50px';
@@ -52,16 +53,26 @@
       console.clear();
       // Viewing DOM Elements
 
+      // This is a HOF, it returns a function that expects
+      // the message to be logged in the group which it is associated with
+      // by design.
+      function createGroupLogger(groupName, shouldCollapse = false) {
+        shouldCollapse
+          ? console.groupCollapsed(groupName)
+          : console.group(groupName);
+        const log = function (message) {
+          console.log(message);
+        };
+        log.end = () => console.groupEnd(groupName);
+        return log;
+      }
       // Grouping together
       dogs.forEach((dog) => {
-        console.groupCollapsed(`${dog.name}`);
-        console.log('name: ', dog.name);
-        console.log('age: ', dog.age);
-        console.groupCollapsed('Another');
-        console.log('another inner group here');
-        console.log('Another');
-        console.groupEnd('Another');
-        console.groupEnd(`${dog.name}`);
+        // console.groupCollapsed(`${dog.name}`);
+        const log = createGroupLogger(`${dog.name}`);
+        log('name: ', dog.name);
+        log('age: ', dog.age);
+        log.end();
       });
       // counting
 
