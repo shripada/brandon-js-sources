@@ -1,47 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Console Tricks!</title>
-  <link rel="icon" href="https://fav.farm/🔥" />
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Console Tricks!</title>
+    <link rel="icon" href="https://fav.farm/🔥" />
+  </head>
+  <body>
+    <p class="message" onClick="makeGreen()">×BREAK×DOWN×</p>
 
-  <p onClick="makeGreen()">×BREAK×DOWN×</p>
+    <script>
+      const dogs = [
+        { name: 'Snickers', age: 2 },
+        { name: 'hugo', age: 8 },
+      ];
+      const messageElement = document.querySelector('.message');
+      console.assert(
+        messageElement !== null,
+        'message element must be present'
+      );
 
-  <script>
-    const dogs = [{ name: 'Snickers', age: 2 }, { name: 'hugo', age: 8 }];
+      console.log(messageElement);
+      console.dir(messageElement); // Very useful to inspect DOM element object's internals.
 
-    function makeGreen() {
-      const p = document.querySelector('p');
-      p.style.color = '#BADA55';
-      p.style.fontSize = '50px';
-    }
+      messageElement.addEventListener('click', makeGreen);
+      console.log(dogs);
+      console.dir(dogs);
+      function makeGreen() {
+        const p = document.querySelector('p');
+        p.style.color = '#BADA55';
+        p.style.fontSize = '50px';
+      }
 
-    // Regular
+      // Interpolated
+      const city = 'mangalore';
+      console.log(`This is the city selected: ${city}`);
+      // Styled
+      console.log(
+        '%c This is a disaster! %c this is peace',
+        'color:red; font-size:2rem;',
+        'color:white; background:green;'
+      );
+      // warning!
+      console.warn('This is a warning!');
+      // Error :|
+      console.error('This is an error');
 
-    // Interpolated
+      // Info
+      console.info('This is info');
 
-    // Styled
+      // clearing
+      console.clear();
+      // Viewing DOM Elements
 
-    // warning!
+      // Grouping together
+      dogs.forEach((dog) => {
+        console.groupCollapsed(`${dog.name}`);
+        console.log('name: ', dog.name);
+        console.log('age: ', dog.age);
+        console.groupCollapsed('Another');
+        console.log('another inner group here');
+        console.log('Another');
+        console.groupEnd('Another');
+        console.groupEnd(`${dog.name}`);
+      });
+      // counting
 
-    // Error :|
-
-    // Info
-
-    // Testing
-
-    // clearing
-
-    // Viewing DOM Elements
-
-    // Grouping together
-
-    // counting
-
-    // timing
-
-  </script>
-</body>
+      // timing
+    </script>
+  </body>
 </html>

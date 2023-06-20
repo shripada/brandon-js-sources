@@ -6,15 +6,20 @@
     <link rel="icon" href="https://fav.farm/🔥" />
   </head>
   <body>
+    <button id="clear-canvas-button">Clear Canvas!</button>
     <canvas id="draw" width="800" height="800"></canvas>
+
     <script>
+      const clearButton = document.querySelector('#clear-canvas-button');
+      /** @type {HTMLCanvasElement} */
       const canvas = document.querySelector('#draw');
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
 
       // We are going to draw in 2D world
+      // Adding jsdoc type specs might improve VScode's ability to code complete
+      /** @type {CanvasRenderingContext2D} */
       const context = canvas.getContext('2d');
-
       // Context is like a set of settings that will be used for drawing.
       context.strokeStyle = '#BADA55';
       context.lineWidth = 4;
@@ -35,9 +40,11 @@
       canvas.addEventListener('mousedown', (e) => {
         console.log('mousedown', e);
         [strokeStartX, strokeStartY] = [e.offsetX, e.offsetY];
+        context.beginPath();
         canDraw = true;
       });
-
+      let prevX;
+      let prevY;
       canvas.addEventListener('mousemove', (e) => {
         if (!canDraw) {
           return;
@@ -51,10 +58,31 @@
 
         strokeStartX = toX;
         strokeStartY = toY;
+
+        // Clear earlier rectangle
+        // context.clearRect(0, 0, canvas.width, canvas.height);
+
+        // context.strokeRect(
+        //   strokeStartX,
+        //   strokeStartY,
+        //   toX - strokeStartX,
+        //   toY - strokeStartY
+        // );
+
+        // prevX = toX;
+        // prevY = toY;
       });
 
       canvas.addEventListener('mouseup', (e) => {
         canDraw = false;
+        context.closePath();
+      });
+
+      clearButton.addEventListener('click', () => {
+        // context.reset();
+        // context.strokeStyle = '#BADA55';
+        // context.lineWidth = 4;
+        context.clearRect(0, 0, canvas.width, canvas.height);
       });
     </script>
 

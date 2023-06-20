@@ -201,6 +201,9 @@ async function getConnectionToCentralDB(userId) {
     const userHandle = await lookupInLocalDb(userId);
     const connectionId = await getConnectionId(userHandle);
     return getCentralDbHandle(connectionId);
+
+    // return Promise.resolve(undefined);
+    // return 10;  // return Promise.resolve(10);
   } catch (error) {
     console.log('Found an error: ', error.message);
   }
@@ -208,10 +211,14 @@ async function getConnectionToCentralDB(userId) {
 }
 
 async function doDbConnection() {
-  const dbHandle = await getConnectionToCentralDB(100);
+  const dbHandle = await getConnectionToCentralDB(10);
   console.log(dbHandle);
 }
 
 doDbConnection();
 
 // In ES8 (2017), async and await
+console.log(
+  'ES6 modules allow use of await even in global scope: ',
+  await getConnectionToCentralDB(10)
+);

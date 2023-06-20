@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="https://fav.farm/✅" />
+    <script type="module" src="./service.js"></script>
+    <title>Posts App</title>
+  </head>
+  <body>
+    <section class="button-container">
+      <button class="previous-button">previous</button>
+      <button class="refresh-button">refresh</button>
+      <button class="next-button">next</button>
+    </section>
+    <section class="post-details">
+      <h2 class="post-heading">post title</h2>
+      <p class="post-description">post description goes here</p>
+    </section>
+
+    <section class="comments-section">
+      <button>View Comments</button>
+      <ul class="comments"></ul>
+    </section>
+
+    <script type="module">
+      import { getPostForId } from './service.js';
+      const previousButton = document.querySelector('.previous-button');
+      const nextButton = document.querySelector('.next-button');
+      const refreshButton = document.querySelector('.refresh-button');
+      const postInfoSection = document.querySelector('.post-details');
+      const postHeading = document.querySelector('.post-details .post-heading');
+      const postDescription = document.querySelector(
+        '.post-details .post-description'
+      );
+
+      function showPostInfoSection(post) {
+        postInfoSection.style.display = 'block';
+        postHeading.textContent = post.title;
+        postDescription.textContent = post.body;
+      }
+
+      function hidePostInfoSection() {
+        postInfoSection.style.display = 'none';
+      }
+      const POST_LOADER_ID = 'post-loader';
+
+      function showPostLoader() {
+        // Step 1: Create the progress indicator element
+        const progressIndicator = document.createElement('div');
+        progressIndicator.id = POST_LOADER_ID;
+        progressIndicator.textContent = 'Loading...';
+        // Add any necessary CSS classes or styling to the progress indicator
+
+        // Step 2: Get the reference to the  button container
+        const buttonContainer = document.querySelector('.button-container');
+
+        // Step 3: Insert the progress indicator after the buttonContainer
+        buttonContainer.insertAdjacentElement('afterend', progressIndicator);
+      }
+
+      function hidePostLoader() {
+        const progressIndicator = document.getElementById(POST_LOADER_ID);
+        progressIndicator.remove();
+      }
+
+      previousButton.addEventListener('click', () => {
+        console.log('previous button tapped');
+      });
+      nextButton.addEventListener('click', () => {
+        console.log('next button tapped');
+      });
+      refreshButton.addEventListener('click', async () => {
+        // console.log('refresh button tapped');
+        // 1. hide the post info
+        hidePostInfoSection();
+        // 2. start showing the progress before we call the service layer to fetch the post data
+        showPostLoader();
+        // 3. call service layer to fetch post
+        try {
+          const post = await getPostForId(1);
+          showPostInfoSection(post);
+        } catch (error) {
+          console.log(error);
+        } finally {
+          hidePostLoader();
+        }
+      });
+
+      const jsonData = await getPostForId(1);
+      console.log(jsonData);
+    </script>
+  </body>
+</html>
