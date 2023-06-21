@@ -96,8 +96,11 @@
     </div>
 
     <script>
+      // We need to check all checkboxes between currently checked checkbox and the most
+      // recently checked checkbox (lastChecked) only if 'shif' key is pressed while checking the current
+      // checkbox.
       function getAllCheckboxes() {
-        return document.querySelectorAll('input[type="checkbox"]');
+        return Array.from(document.querySelectorAll('input[type="checkbox"]'));
       }
 
       const allCheckboxes = getAllCheckboxes();
@@ -107,26 +110,31 @@
       );
 
       function selectedCheckboxes() {
-        return document.querySelectorAll('input[type="checkbox"]:checked');
+        return Array.from(
+          document.querySelectorAll('input[type="checkbox"]:checked')
+        );
       }
-
+      let lastChecked;
       // Lets attach a click listener for each of the checkboxes
       allCheckboxes.forEach((checkbox) => {
         checkbox.addEventListener('click', function (event) {
-          if (event.shiftKey === true) {
-            // no shift is pressed
-            // in this case deselect any other selection,
-            // and select the current checkbox if not already selected.
-            // if it is already selected, de select it.
-            console.log(this.checked);
-            console.log('this is the checkbox', this);
-            const checkedBoxes = selectedCheckboxes();
-            checkedBoxes.forEach((checkbox) => {
-              // console.log(checkbox);
-              if (checkbox !== this) {
-                checkbox.checked = false;
-              }
-            });
+          const currentCheckbox = event.target;
+          if (
+            event.shiftKey === true &&
+            lastChecked &&
+            currentCheckbox.checked
+          ) {
+            // Now we would like to check all checkboxes that fall within the
+            // range of last checked checkbox and the current checkbox
+            const lowerIndex = allCheckboxes.indexOf(lastChecked);
+            const upperIndex = allCheckboxes.indexOf(currentCheckbox);
+            const lower = Math.min(lowerIndex, upperIndex);
+            const higher = Math.max(lowerIndex, upperIndex);
+            const checkboxesToSelect = allCheckboxes.slice(lower, higher);
+            checkboxesToSelect.forEach((c) => (c.checked = true));
+          }
+          if (currentCheckbox.checked) {
+            lastChecked = currentCheckbox;
           }
         });
       });
