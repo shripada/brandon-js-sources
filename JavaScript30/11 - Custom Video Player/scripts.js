@@ -1,6 +1,9 @@
 /* Get Our Elements */
 const player = document.querySelector('.player');
 console.assert(player !== null, 'player should be non null');
+/**
+ *  * @type {HTMLVideoElement}
+ */
 const video = player.querySelector('.viewer');
 console.assert(video !== null);
 const progress = player.querySelector('.progress');
@@ -21,6 +24,20 @@ console.assert(ranges !== null);
 const fullscreenButton = document.querySelector('.fullscreen');
 console.assert(fullscreenButton !== null);
 
+const loader = document.querySelector('.loader');
+console.assert(loader !== null);
+
+const tooltip = document.querySelector('.tooltip');
+console.assert(tooltip !== null);
+
+// show progress
+function showProgress() {
+  loader.style.display = 'block';
+}
+function hideProgress() {
+  loader.style.display = 'none';
+}
+showProgress();
 player.addEventListener('click', (event) => {
   // Check if video is playing, if so pause it, otherwise play it
   if (video.paused) {
@@ -58,3 +75,26 @@ function enterFullScreen() {
 }
 
 fullscreenButton.addEventListener('click', enterFullScreen);
+
+video.oncanplay = () => {
+  hideProgress();
+};
+
+function scrub(event) {
+  const percentage = (event.offsetX / progress.offsetWidth) * 100;
+  console.log(percentage);
+  video.currentTime = percentage * video.duration;
+  progressBar.style.flexBasis = `${percentage}%`;
+  tooltip.style.left = `${percentage}%`;
+  tooltip.style.right = `4px`;
+}
+let scrubStarted = false;
+progress.addEventListener('click', scrub);
+progress.addEventListener('mousedown', () => {
+  scrubStarted = true;
+  showProgress();
+});
+progress.addEventListener('mousemove', (event) => scrubStarted && scrub(event));
+progress.addEventListener('mouseup', (event) => {
+  scrubStarted = false;
+});
