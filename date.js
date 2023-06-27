@@ -1,4 +1,6 @@
 // without any args, will mean current time, in current timezone\.
+const assert = require('assert');
+
 const today = new Date();
 console.log(today); //2023-06-26T05:28:30.276Z
 
@@ -36,3 +38,98 @@ console.log(start);
 const now = new Date(start);
 console.log(now.toString());
 console.log(now);
+
+function getToday() {
+  return new Date();
+}
+
+const milliSecsInDay = 24 * 60 * 60 * 1000;
+
+function yesterday() {
+  const td = getToday();
+  const todayMilliSecs = td.getTime();
+
+  const yesterday = new Date(todayMilliSecs - milliSecsInDay);
+  return yesterday;
+}
+
+// Comparing dates
+const td = getToday();
+const yd = yesterday();
+
+if (td > yd) {
+  console.log('today is bigger than yesterday');
+}
+
+const firstDay = new Date(2023, 05, 26);
+const secondDay = new Date(2023, 05, 26);
+
+if (firstDay == secondDay) {
+  console.log('both are equal');
+}
+console.log(firstDay.getTime());
+console.log(secondDay.getTime());
+console.log(secondDay.valueOf());
+console.log(firstDay.valueOf());
+
+function yearMonthDay(date) {
+  const year = date.getFullYear();
+  const month = date.getMonth();
+  const day = date.getDate();
+  return { year, month, day };
+}
+/**
+ * This function will format the given date such that
+ * if it represents today, then it will return 'today'
+ * if it represents yday, then it will say yesterday
+ * if it is n days ago, it will print like so '3 days ago'.
+ * if it is tomorrow, it will say 'tomorrow'
+ * or 'n days from now'
+ * @param {Date} date
+ * @returns the formatted string representation of the date.
+ */
+function formatDate(date) {
+  // First get today, and extract year, month, day from it as well as the date passed
+  const today = new Date();
+  const { year, month, day } = yearMonthDay(today);
+  const {
+    year: yearOther,
+    month: monthOther,
+    day: dayOther,
+  } = yearMonthDay(date);
+
+  // if year, month, day match, then it is today
+  if (year === yearOther && month === monthOther && day === dayOther) {
+    return 'today';
+  }
+
+  // we should ensure both dates are in either local timezone or in UTC
+  const otherDate = new Date(date);
+  const today1 = new Date(today);
+
+  otherDate.setHours(0, 0, 0, 0);
+  today1.setHours(0, 0, 0, 0);
+  const differenceInDays =
+    (today1.getTime() - otherDate.getTime()) / milliSecsInDay;
+  if (differenceInDays === 1) {
+    return 'yesterday';
+  } else {
+    return `${differenceInDays} days ago`;
+  }
+}
+assert.equal(formatDate(getToday()), 'today');
+const now1 = new Date();
+const yesterday1 = new Date(
+  now1.getFullYear(),
+  now1.getMonth(),
+  now1.getDate() - 1
+);
+assert.equal(formatDate(yesterday1), 'yesterday');
+
+const dayBeforeYesterday = new Date(
+  now1.getFullYear(),
+  now1.getMonth(),
+  now1.getDate() - 2
+);
+
+assert.equal(formatDate(dayBeforeYesterday), '2 days ago');
