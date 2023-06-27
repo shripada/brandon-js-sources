@@ -1,13 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Key Detection</title>
-  <script type="text/javascript" src="https://www.cornify.com/js/cornify.js"></script>
-  <link rel="icon" href="https://fav.farm/🔥" />
-</head>
-<body>
-<script>
-</script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Key Detection</title>
+    <script
+      type="text/javascript"
+      src="https://www.cornify.com/js/cornify.js"
+    ></script>
+    <link rel="icon" href="https://fav.farm/🔥" />
+    <style>
+      html,
+      body {
+        height: 100%;
+      }
+      .text {
+        color: green;
+        border: 1px solid deeppink;
+        height: 50%;
+        word-wrap: break-word;
+        padding: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="text"></div>
+    <script>
+      let keys = [];
+      const secretCode = 'wesbos';
+      const textElement = document.querySelector('.text');
+      console.assert(textElement !== null, 'text element must be present');
+      window.addEventListener('keyup', (event) => {
+        console.log(event.key);
+
+        if (event.key === 'Backspace') {
+          keys = keys.slice(0, keys.length - 1);
+        } else {
+          keys.push(event.key);
+        }
+        textElement.textContent = keys.join('');
+
+        if (keys.length >= secretCode.length) {
+          const mostRecentSequence = keys.slice(
+            keys.length - secretCode.length
+          );
+          const sequence = mostRecentSequence.join('');
+          console.log('recent sequence:', mostRecentSequence.join(''));
+          if (sequence === secretCode) {
+            //cornify_add();
+            console.log('found the sequence');
+          }
+        }
+      });
+    </script>
+  </body>
 </html>
