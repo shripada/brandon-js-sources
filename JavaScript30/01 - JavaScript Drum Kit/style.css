@@ -50,3 +50,27 @@ kbd {
   letter-spacing: 0.1rem;
   color: #ffc600;
 }
+
+.p-container {
+  border: 1px solid gray;
+  height: 5px;
+  padding: 0;
+}
+.progress {
+  height: 100%;
+  padding: 0;
+  transition: width 0.7s;
+  width: 0;
+  background-color: #bada55;
+}
+
+.total {
+  position: fixed;
+  top: 60vh;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 3rem;
+  color: white;
+  text-transform: uppercase;
+  text-align: center;
+}
